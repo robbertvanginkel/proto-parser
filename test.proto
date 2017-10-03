@@ -1,0 +1,33 @@
+syntax = "proto3";
+import weak "thihngy";
+import public "thihngy2";
+import "thihngyt";
+
+package foo.bar;
+
+option java_thingy = true;
+
+enum EnumAllowingAlias {
+  option allow_alias = true;
+  UNKNOWN = 0;
+  STARTED = 1;
+  RUNNING = 2 [(custom_option) = "hello world"];
+}
+
+message outer {
+    repeated int32 samples = 4;
+    foo.bar samples = 4 [packed=true];
+    message inner {
+        oneof foo {
+            string name = 4;
+            SubMessage sub_message = 9;
+        }
+    }
+    map<string, Project> projects = 3 [mapped = 1];
+    reserved 2, 15, 9 to 11, 100 to 1000;
+    reserved 2, 15, 9 to "max";
+    reserved "foo", "bar";
+    //reserved "foo";
+    reserved 2;
+}
+
