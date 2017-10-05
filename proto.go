@@ -1,5 +1,4 @@
 package main
-
 import (
 	"os"
 
@@ -118,6 +117,23 @@ type Message struct {
 	Fields    []*Field    ` | @@ } "}"`
 }
 
+type Rpc struct {
+	Pos           lexer.Position
+	Name          string    `"rpc" @Ident "("`
+	RequestStream bool      `[@"stream"]`
+	RequestType   string    `@(["."] Ident { "." Ident }) ")"`
+	ReturnStream  bool      `"returns" "(" [@"stream"]`
+	ReturnType    string    `@(["."] Ident { "." Ident }) ")"`
+	Options       []*Option `(("{" { @@ } "}") | ";")`
+}
+
+type Service struct {
+	Pos     lexer.Position
+	Name    string    `"service" @Ident "{"`
+	Options []*Option `{ @@ `
+	Rpcs    []*Rpc    ` | @@ } "}"`
+}
+
 type Proto struct {
 	Pos      lexer.Position
 	Syntax   string     `"syntax" "=" @String ";"`
@@ -125,6 +141,7 @@ type Proto struct {
 	Packages []*Package `  | @@ `
 	Options  []*Option  `  | @@ `
 	Enums    []*Enum    `  | @@ `
+	Services []*Service `  | @@ `
 	Messages []*Message `  | @@ }`
 }
 
